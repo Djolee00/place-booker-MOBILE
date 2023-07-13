@@ -1,0 +1,14 @@
+# Ignore place-booker-backend/target directory
+place-booker-backend/target/
+
+# Ignore IDE files in place-booker-backend
+place-booker-backend/.idea/
+place-booker-backend/*.iml
+place-booker-backend/*.ipr
+place-booker-backend/*.iws
+
+# Ignore application properties in place-booker-backend
+place-booker-backend/src/main/resources/application.properties
+
+# Ignore log files in place-booker-backend
+place-booker-backend/log/
