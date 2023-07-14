@@ -1,7 +1,6 @@
 package com.placebooker.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.placebooker.domain.PlaceLocation;
 import java.time.LocalDate;
 import lombok.Builder;
 
@@ -16,4 +15,4 @@ public record PlaceDto(
     LocalDate availableFrom,
     LocalDate availableTo,
     UserDto user,
-    PlaceLocation placeLocation) {}
+    PlaceLocationDto placeLocation) {}

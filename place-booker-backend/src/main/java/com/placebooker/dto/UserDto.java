@@ -6,4 +6,4 @@ import lombok.Builder;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record UserDto(
-    String email, String password, String firstName, String lastName, Integer age) {}
+    Long id, String email, String password, String firstName, String lastName, Integer age) {}
