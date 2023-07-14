@@ -1,6 +1,7 @@
 package com.placebooker.service.impl;
 
 import com.placebooker.domain.Place;
+import com.placebooker.exception.custom.NotFoundException;
 import com.placebooker.repository.PlaceRepository;
 import com.placebooker.service.PlaceService;
 import java.util.List;
@@ -21,5 +22,13 @@ public class PlaceServiceImpl implements PlaceService {
   @Transactional(readOnly = true)
   public List<Place> getPlaces(Pageable pageable) {
     return placeRepository.findAll(pageable).getContent();
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Place getPlaceById(Long id) {
+    return placeRepository
+        .findById(id)
+        .orElseThrow(() -> new NotFoundException("Place with ID: " + id + " can't be found"));
   }
 }
