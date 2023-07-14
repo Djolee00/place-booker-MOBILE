@@ -31,4 +31,10 @@ public class PlaceServiceImpl implements PlaceService {
         .findById(id)
         .orElseThrow(() -> new NotFoundException("Place with ID: " + id + " can't be found"));
   }
+
+  @Override
+  @Transactional
+  public Long saveOrUpdate(Place place) {
+    return placeRepository.save(place).getId();
+  }
 }

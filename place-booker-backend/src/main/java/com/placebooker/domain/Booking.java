@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,11 +41,13 @@ public class Booking {
 
   @NotNull
   @FutureOrPresent
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "booked_from")
   private LocalDate bookedFrom;
 
   @NotNull
   @FutureOrPresent
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "booked_to")
   private LocalDate bookedTo;
 

@@ -25,4 +25,16 @@ public class PlaceLocation {
   @NotNull
   @Column(name = "static_map_image_url")
   private String staticMapImageUrl;
+
+  @NotNull
+  @Column(name = "lat")
+  private String lat;
+
+  @NotNull
+  @Column(name = "lng")
+  private String lng;
+
+  @OneToOne
+  @JoinColumn(name = "place_id", nullable = false)
+  private Place place;
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,11 +37,13 @@ public class Place {
 
   @NotNull
   @FutureOrPresent
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "available_from")
   private LocalDate availableFrom;
 
   @NotNull
   @FutureOrPresent
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "available_to")
   private LocalDate availableTo;
 
@@ -48,7 +51,13 @@ public class Place {
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "place_location_id")
+  @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
   private PlaceLocation placeLocation;
+
+  public void setPlaceLocation(PlaceLocation placeLocation) {
+    if (placeLocation != null) {
+      placeLocation.setPlace(this);
+    }
+    this.placeLocation = placeLocation;
+  }
 }

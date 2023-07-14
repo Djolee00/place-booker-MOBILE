@@ -11,6 +11,8 @@ public class PlaceLocationMapper {
     return PlaceLocation.builder()
         .address(placeLocationDto.address())
         .staticMapImageUrl(placeLocationDto.staticMapImageUrl())
+        .lat(placeLocationDto.lat())
+        .lng(placeLocationDto.lng())
         .build();
   }
 
@@ -18,6 +20,8 @@ public class PlaceLocationMapper {
     return PlaceLocationDto.builder()
         .address(placeLocation.getAddress())
         .staticMapImageUrl(placeLocation.getStaticMapImageUrl())
+        .lat(placeLocation.getLat())
+        .lng(placeLocation.getLng())
         .build();
   }
 }

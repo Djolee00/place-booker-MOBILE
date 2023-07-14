@@ -9,4 +9,6 @@ public interface PlaceService {
   List<Place> getPlaces(Pageable pageable);
 
   Place getPlaceById(Long id);
+
+  Long saveOrUpdate(Place place);
 }
