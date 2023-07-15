@@ -7,16 +7,14 @@ import com.placebooker.repository.BookingRepository;
 import com.placebooker.service.BookingService;
 import java.util.Objects;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
   private final BookingRepository bookingRepository;
-
-  public BookingServiceImpl(BookingRepository bookingRepository) {
-    this.bookingRepository = bookingRepository;
-  }
 
   @Override
   public Set<Booking> getBookingsByUser(User user) {
