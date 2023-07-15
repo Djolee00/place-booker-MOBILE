@@ -1,0 +1,10 @@
+package com.placebooker.service;
+
+import com.placebooker.domain.Booking;
+import com.placebooker.domain.User;
+import java.util.Set;
+
+public interface BookingService {
+
+  Set<Booking> getBookingsByUser(User user);
+}

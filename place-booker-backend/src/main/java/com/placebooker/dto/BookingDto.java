@@ -19,4 +19,6 @@ public record BookingDto(
     String lastName,
     Integer guestNumber,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedFrom,
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedTo) {}
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedTo,
+    UserDto user,
+    PlaceDto place) {}
