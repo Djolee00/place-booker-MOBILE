@@ -1,6 +1,7 @@
 package com.placebooker.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.placebooker.constraint.DateOrder;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@DateOrder(
+    dateFromField = "availableFrom",
+    dateToField = "availableTo",
+    message = "Available from date must be less or equal to available to date")
 public record PlaceDto(
     Long id,
     @NotBlank String title,

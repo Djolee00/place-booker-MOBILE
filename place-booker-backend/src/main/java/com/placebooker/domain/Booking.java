@@ -1,5 +1,6 @@
 package com.placebooker.domain;
 
+import com.placebooker.constraint.DateOrder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 @Builder
+@DateOrder(
+    dateFromField = "bookedFrom",
+    dateToField = "bookedTo",
+    message = "Booked from date must be less or equal to booked to date")
 @Entity
 @Table(name = "booking")
 public class Booking {
