@@ -47,6 +47,13 @@ public class ApiExceptionHandler {
     return new ResponseEntity<>(exception, HttpStatus.NOT_FOUND);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<CustomException> onIllegalArgumentException(RuntimeException ex) {
+    CustomException exception =
+        new CustomException(ex.getMessage(), HttpStatus.BAD_REQUEST, OffsetDateTime.now());
+    return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(ConstraintViolationException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleConstraintViolationException(ConstraintViolationException ex) {

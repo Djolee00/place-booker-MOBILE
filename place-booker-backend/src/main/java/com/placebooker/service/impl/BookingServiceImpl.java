@@ -5,6 +5,7 @@ import com.placebooker.domain.User;
 import com.placebooker.exception.custom.NotFoundException;
 import com.placebooker.repository.BookingRepository;
 import com.placebooker.service.BookingService;
+import java.util.Objects;
 import java.util.Set;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,17 @@ public class BookingServiceImpl implements BookingService {
 
   @Override
   public Booking saveBooking(Booking booking) {
+    if (!((booking.getBookedFrom().isEqual(booking.getPlace().getAvailableFrom())
+            || booking.getBookedFrom().isAfter(booking.getPlace().getAvailableFrom()))
+        && (booking.getBookedTo().isEqual(booking.getPlace().getAvailableTo())
+            || booking.getBookedTo().isBefore(booking.getPlace().getAvailableTo()))))
+      throw new IllegalArgumentException(
+          "Booking dates must be in range of that place's available date range");
+
+    if (Objects.equals(booking.getUser().getId(), booking.getPlace().getUser().getId())) {
+      throw new IllegalArgumentException("User who made place can't book that place");
+    }
+
     return bookingRepository.save(booking);
   }
 }
