@@ -46,7 +46,7 @@ public class BookingController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<Long> createBooking(@Valid @RequestBody BookingDto bookingDto) {
+  public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingDto bookingDto) {
     User user = userService.getUserById(bookingDto.user().id());
     Place place = placeService.getPlaceById(bookingDto.place().id());
 
@@ -54,6 +54,7 @@ public class BookingController {
     booking.setUser(user);
     booking.setPlace(place);
 
-    return ResponseEntity.ok(bookingService.saveBooking(booking).getId());
+    booking = bookingService.saveBooking(booking);
+    return ResponseEntity.ok(BookingMapper.toDto(booking));
   }
 }

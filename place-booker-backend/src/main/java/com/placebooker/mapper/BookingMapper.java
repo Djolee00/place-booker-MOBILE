@@ -16,6 +16,7 @@ public class BookingMapper {
         .bookedFrom(bookingDto.bookedFrom())
         .bookedTo(bookingDto.bookedTo())
         .guestNumber(bookingDto.guestNumber())
+            .title(bookingDto.title())
         .build();
   }
 
