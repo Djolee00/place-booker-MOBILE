@@ -42,7 +42,7 @@ public class PlaceController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<Long> savePlace(@Valid @RequestBody PlaceDto placeDto) {
+  public ResponseEntity<Long> createPlace(@Valid @RequestBody PlaceDto placeDto) {
     User user = userService.getUserById(placeDto.user().id());
     PlaceLocation placeLocation = PlaceLocationMapper.toEntity(placeDto.placeLocation());
 
@@ -50,6 +50,21 @@ public class PlaceController {
     place.setUser(user);
     place.setPlaceLocation(placeLocation);
 
-    return ResponseEntity.ok(placeService.saveOrUpdate(place));
+    return ResponseEntity.ok(placeService.saveOrUpdate(place).getId());
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<PlaceDto> updatePlace(
+      @PathVariable Long id, @Valid @RequestBody PlaceDto placeDto) {
+    Place place = placeService.getPlaceById(id);
+
+    place
+        .setTitle(placeDto.title())
+        .setDescription(placeDto.description())
+        .setPrice(placeDto.price())
+        .setAvailableFrom(placeDto.availableFrom())
+        .setAvailableTo(placeDto.availableTo());
+
+    return ResponseEntity.ok(PlaceMapper.toDto(placeService.saveOrUpdate(place)));
   }
 }

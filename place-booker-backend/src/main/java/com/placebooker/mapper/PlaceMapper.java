@@ -29,6 +29,10 @@ public class PlaceMapper {
         .availableTo(place.getAvailableTo())
         .price(place.getPrice())
         .user(place.getUser() != null ? UserMapper.toDto(place.getUser()) : null)
+        .placeLocation(
+            place.getPlaceLocation() != null
+                ? PlaceLocationMapper.toDto(place.getPlaceLocation())
+                : null)
         .build();
   }
 }

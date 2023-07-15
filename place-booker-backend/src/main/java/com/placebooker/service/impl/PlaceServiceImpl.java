@@ -34,7 +34,7 @@ public class PlaceServiceImpl implements PlaceService {
 
   @Override
   @Transactional
-  public Long saveOrUpdate(Place place) {
-    return placeRepository.save(place).getId();
+  public Place saveOrUpdate(Place place) {
+    return placeRepository.save(place);
   }
 }

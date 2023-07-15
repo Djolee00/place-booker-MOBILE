@@ -5,6 +5,7 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @NoArgsConstructor
@@ -12,6 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Getter
 @Setter
 @Builder
+@Accessors(chain = true)
 @Entity
 @Table(name = "place")
 public class Place {

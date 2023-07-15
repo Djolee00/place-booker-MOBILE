@@ -10,5 +10,5 @@ public interface PlaceService {
 
   Place getPlaceById(Long id);
 
-  Long saveOrUpdate(Place place);
+  Place saveOrUpdate(Place place);
 }
