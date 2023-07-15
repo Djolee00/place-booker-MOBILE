@@ -33,4 +33,9 @@ public class BookingServiceImpl implements BookingService {
   public void removeBooking(Booking booking) {
     bookingRepository.delete(booking);
   }
+
+  @Override
+  public Booking saveBooking(Booking booking) {
+    return bookingRepository.save(booking);
+  }
 }

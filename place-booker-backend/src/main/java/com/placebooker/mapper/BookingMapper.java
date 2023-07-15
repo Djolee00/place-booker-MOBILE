@@ -16,8 +16,6 @@ public class BookingMapper {
         .bookedFrom(bookingDto.bookedFrom())
         .bookedTo(bookingDto.bookedTo())
         .guestNumber(bookingDto.guestNumber())
-        .user(bookingDto.user() != null ? UserMapper.toEntity(bookingDto.user()) : null)
-        .place(bookingDto.place() != null ? PlaceMapper.toEntity(bookingDto.place()) : null)
         .build();
   }
 

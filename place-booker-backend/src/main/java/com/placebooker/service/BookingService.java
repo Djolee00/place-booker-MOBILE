@@ -11,4 +11,6 @@ public interface BookingService {
   Booking getBookingById(Long id);
 
   void removeBooking(Booking booking);
+
+  Booking saveBooking(Booking booking);
 }
