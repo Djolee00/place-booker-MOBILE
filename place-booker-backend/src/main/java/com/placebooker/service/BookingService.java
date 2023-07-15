@@ -7,4 +7,8 @@ import java.util.Set;
 public interface BookingService {
 
   Set<Booking> getBookingsByUser(User user);
+
+  Booking getBookingById(Long id);
+
+  void removeBooking(Booking booking);
 }

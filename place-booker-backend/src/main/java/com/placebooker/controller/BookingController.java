@@ -9,10 +9,7 @@ import com.placebooker.service.UserService;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -32,5 +29,11 @@ public class BookingController {
     Set<Booking> bookings = bookingService.getBookingsByUser(user);
     return ResponseEntity.ok(
         bookings.stream().map(BookingMapper::toDto).collect(Collectors.toSet()));
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteBooking(@PathVariable Long id) {
+    Booking booking = bookingService.getBookingById(id);
+    bookingService.removeBooking(booking);
   }
 }

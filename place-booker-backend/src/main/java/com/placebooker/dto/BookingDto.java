@@ -2,6 +2,8 @@ package com.placebooker.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.placebooker.constraint.DateOrder;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import lombok.Builder;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,11 +16,11 @@ import org.springframework.format.annotation.DateTimeFormat;
     message = "Booked from date must be less or equal to booked to date")
 public record BookingDto(
     Long id,
-    String title,
-    String firstName,
-    String lastName,
-    Integer guestNumber,
+    @NotBlank String title,
+    @NotBlank String firstName,
+    @NotBlank String lastName,
+    @NotNull Integer guestNumber,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedFrom,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedTo,
-    UserDto user,
-    PlaceDto place) {}
+    @NotNull UserDto user,
+    @NotNull PlaceDto place) {}
