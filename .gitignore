@@ -12,3 +12,49 @@ place-booker-backend/src/main/resources/application.properties
 
 # Ignore log files in place-booker-backend
 place-booker-backend/log/
+
+
+# Ignore Ionic generated files
+/place-booker-frontend/www/
+/place-booker-frontend/platforms/
+/place-booker-frontend/plugins/
+/place-booker-frontend/.ionic/
+
+# Ignore compiled output
+/place-booker-frontend/dist/
+/place-booker-frontend/tmp/
+/place-booker-frontend/out-tsc/
+/place-booker-frontend/bazel-out/
+
+# Ignore Node dependencies
+/place-booker-frontend/node_modules/
+
+# Ignore IDE and editor files
+/place-booker-frontend/.idea/
+/place-booker-frontend/.project
+/place-booker-frontend/.classpath
+/place-booker-frontend/.c9/
+/place-booker-frontend/*.launch
+/place-booker-frontend/.settings/
+/place-booker-frontend/*.sublime-project
+/place-booker-frontend/*.sublime-workspace
+
+# Ignore Visual Studio Code files
+/place-booker-frontend/.vscode/
+/place-booker-frontend/.history/
+
+# Ignore Angular-specific files
+/place-booker-frontend/.angular/
+/place-booker-frontend/.angular/cache/
+
+# Ignore miscellaneous files
+/place-booker-frontend/.sass-cache/
+/place-booker-frontend/connect.lock
+/place-booker-frontend/coverage/
+/place-booker-frontend/libpeerconnection.log
+/place-booker-frontend/testem.log
+/place-booker-frontend/typings/
+
+# Ignore system files
+/place-booker-frontend/.DS_Store
+/place-booker-frontend/Thumbs.db
