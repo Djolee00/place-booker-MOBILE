@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/bookings")
+@CrossOrigin
 public class BookingController {
 
   private final UserService userService;
