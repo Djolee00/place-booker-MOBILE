@@ -39,6 +39,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         .token(jwt)
         .expirationTime(
             jwtService.extractExpiration(jwt).toInstant().atOffset(ZoneOffset.ofHours(2)))
+        .userId(user.getId())
+        .email(user.getEmail())
         .build();
   }
 
@@ -55,6 +57,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         .token(jwt)
         .expirationTime(
             jwtService.extractExpiration(jwt).toInstant().atOffset(ZoneOffset.ofHours(2)))
+        .userId(user.getId())
+        .email(user.getEmail())
         .build();
   }
 }

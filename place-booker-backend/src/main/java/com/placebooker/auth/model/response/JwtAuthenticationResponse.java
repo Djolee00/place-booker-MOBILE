@@ -4,4 +4,5 @@ import java.time.OffsetDateTime;
 import lombok.Builder;
 
 @Builder
-public record JwtAuthenticationResponse(String token, OffsetDateTime expirationTime) {}
+public record JwtAuthenticationResponse(
+    Long userId, String email, String token, OffsetDateTime expirationTime) {}
