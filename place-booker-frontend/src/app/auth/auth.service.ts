@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 export interface AuthResponseData {
   userId: number;
   token: string;
-  expirationTime: Date;
+  expirationTime: string;
   email: string;
 }
 
@@ -104,9 +104,9 @@ export class AuthService implements OnDestroy {
   }
 
   private setUserData(userData: AuthResponseData) {
-    const expirationTime = new Date(
-      new Date().getTime() + +userData.expirationTime * 1000
-    );
+    console.log(userData);
+    const expirationTime = new Date(userData.expirationTime);
+
     const user = new User(
       userData.userId,
       userData.email,
