@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/places")
-@CrossOrigin
 public class PlaceController {
 
   private final PlaceService placeService;
