@@ -58,5 +58,5 @@ place-booker-backend/log/
 # Ignore system files
 /place-booker-frontend/.DS_Store
 /place-booker-frontend/Thumbs.db
-place-booker-frontend/src/environments/environment.ts
-place-booker-frontend/src/environments/environment.prod.ts
+/place-booker-frontend/src/environments/environment.ts
+/place-booker-frontend/src/environments/environment.prod.ts
