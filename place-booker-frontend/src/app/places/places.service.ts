@@ -42,7 +42,7 @@ export class PlacesService {
       switchMap((token) => {
         const headers = this.createAuthHeader(token);
         return this.http.get<PlaceResponse[]>(`${environment.apiUrl}/places`, {
-          headers,
+          headers: headers,
         });
       }),
       map((placesData: PlaceResponse[]) => {
