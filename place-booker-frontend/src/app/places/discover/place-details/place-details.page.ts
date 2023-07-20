@@ -90,7 +90,9 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
     }
   }
 
-  onBookPlace() {}
+  onBookPlace() {
+    console.log('PROBA');
+  }
 
   onShowFullMap() {
     this.modalCtrl
