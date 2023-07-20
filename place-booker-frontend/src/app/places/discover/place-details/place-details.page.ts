@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from '../../places.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BookingService } from 'src/app/bookings/booking.service';
+import { MapModelComponent } from 'src/app/shared/map-model/map-model.component';
 
 @Component({
   selector: 'app-place-details',
@@ -91,5 +92,22 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
 
   onBookPlace() {}
 
-  onShowFullMap() {}
+  onShowFullMap() {
+    this.modalCtrl
+      .create({
+        component: MapModelComponent,
+        componentProps: {
+          center: {
+            lat: this.place.location.lat,
+            lng: this.place.location.lng,
+          },
+          selectable: false,
+          closeButtonText: 'Close',
+          title: this.place.location.address,
+        },
+      })
+      .then((modalEl) => {
+        modalEl.present();
+      });
+  }
 }
