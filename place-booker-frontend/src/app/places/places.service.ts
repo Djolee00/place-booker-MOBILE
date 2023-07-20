@@ -48,7 +48,7 @@ export class PlacesService {
       map((placesData: PlaceResponse[]) => {
         return placesData.map((placeData: PlaceResponse) => {
           return new Place(
-            placeData.id.toString(),
+            placeData.id,
             placeData.title,
             placeData.description,
             placeData.imageUrl,
@@ -63,6 +63,34 @@ export class PlacesService {
       tap((places) => {
         this._places.next(places);
         console.log(places);
+      })
+    );
+  }
+
+  getPlace(id: number) {
+    return this.authService.token.pipe(
+      take(1),
+      switchMap((token) => {
+        const headers = this.createAuthHeader(token);
+        return this.http.get<PlaceResponse>(
+          `${environment.apiUrl}/places/${id}`,
+          {
+            headers: headers,
+          }
+        );
+      }),
+      map((placeData) => {
+        return new Place(
+          placeData.id,
+          placeData.title,
+          placeData.description,
+          placeData.imageUrl,
+          placeData.price,
+          new Date(placeData.availableFrom),
+          new Date(placeData.availableTo),
+          placeData.user,
+          placeData.placeLocation
+        );
       })
     );
   }
