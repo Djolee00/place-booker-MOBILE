@@ -60,3 +60,5 @@ place-booker-backend/log/
 /place-booker-frontend/Thumbs.db
 /place-booker-frontend/src/environments/environment.ts
 /place-booker-frontend/src/environments/environment.prod.ts
+place-booker-frontend/src/environments/environment.ts
+place-booker-frontend/src/environments/environment.prod.ts

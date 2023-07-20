@@ -89,7 +89,12 @@ export class PlacesService {
           new Date(placeData.availableFrom),
           new Date(placeData.availableTo),
           placeData.user,
-          placeData.placeLocation
+          {
+            ...placeData.placeLocation,
+            staticMapImageUrl:
+              placeData.placeLocation.staticMapImageUrl +
+              `&key=${environment.googleMapsAPIKey}`,
+          }
         );
       })
     );

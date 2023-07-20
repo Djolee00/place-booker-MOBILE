@@ -13,6 +13,7 @@ import { PlacesService } from '../../places.service';
 import { AuthService } from 'src/app/auth/auth.service';
 import { BookingService } from 'src/app/bookings/booking.service';
 import { MapModelComponent } from 'src/app/shared/map-model/map-model.component';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-place-details',
@@ -90,10 +91,7 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
     }
   }
 
-  onBookPlace() {
-    console.log('PROBA');
-    console.log('PROBA2');
-  }
+  onBookPlace() {}
 
   onShowFullMap() {
     this.modalCtrl
