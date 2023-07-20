@@ -92,6 +92,7 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
 
   onBookPlace() {
     console.log('PROBA');
+    console.log('PROBA2');
   }
 
   onShowFullMap() {
