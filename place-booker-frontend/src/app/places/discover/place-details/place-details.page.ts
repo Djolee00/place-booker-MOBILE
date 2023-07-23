@@ -14,6 +14,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { BookingService } from 'src/app/bookings/booking.service';
 import { MapModelComponent } from 'src/app/shared/map-model/map-model.component';
 import { environment } from 'src/environments/environment';
+import { CreateBookingComponent } from 'src/app/bookings/create-booking/create-booking.component';
 
 @Component({
   selector: 'app-place-details',
@@ -91,7 +92,33 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
     }
   }
 
-  onBookPlace() {}
+  onBookPlace() {
+    this.actionSheetCtrl
+      .create({
+        header: 'Choose an Action',
+        buttons: [
+          {
+            text: 'Select Date',
+            handler: () => {
+              this.openBookingModal('select');
+            },
+          },
+          {
+            text: 'Random date',
+            handler: () => {
+              this.openBookingModal('random');
+            },
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+          },
+        ],
+      })
+      .then((actionSheetEl) => {
+        actionSheetEl.present();
+      });
+  }
 
   onShowFullMap() {
     this.modalCtrl
@@ -109,6 +136,45 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
       })
       .then((modalEl) => {
         modalEl.present();
+      });
+  }
+
+  openBookingModal(mode: 'select' | 'random') {
+    console.log(mode);
+    this.modalCtrl
+      .create({
+        component: CreateBookingComponent,
+        componentProps: { selectedPlace: this.place, selectedMode: mode },
+      })
+      .then((modalEl) => {
+        modalEl.present();
+        return modalEl.onDidDismiss();
+      })
+      .then((resultData) => {
+        if (resultData.role == 'confirm') {
+          this.loadingCtrl
+            .create({
+              message: 'Booking place...',
+            })
+            .then((loadingEl) => {
+              loadingEl.present();
+              const data = resultData.data.bookingData;
+              // this.bookingService
+              //   .addBooking(
+              //     this.place.id,
+              //     this.place.title,
+              //     this.place.imageUrl,
+              //     data.firstName,
+              //     data.lastName,
+              //     data.guestNumber,
+              //     data.startDate,
+              //     data.endDate
+              //   )
+              // .subscribe(() => {
+              //   loadingEl.dismiss();
+              // });
+            });
+        }
       });
   }
 }
