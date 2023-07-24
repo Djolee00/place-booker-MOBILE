@@ -27,16 +27,17 @@
     </ion-row>
     <ion-row>
       <ion-col size-sm="6" offset-sm="3" class="ion-padding ion-text-center">
-        <p>{{place.location.address}}</p>
+        <p>{{place.placeLocation.address}}</p>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size-sm="6" offset-sm="3" class="ion-no-padding">
         <ion-img
           class="location-image"
-          [src]="place.location.staticMapImageUrl"
+          [src]="place.placeLocation.staticMapImageUrl"
           role="button"
           (click)="onShowFullMap()"
+          alt="No image"
         ></ion-img>
       </ion-col>
     </ion-row>

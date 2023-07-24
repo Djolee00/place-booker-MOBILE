@@ -126,12 +126,12 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
         component: MapModelComponent,
         componentProps: {
           center: {
-            lat: this.place.location.lat,
-            lng: this.place.location.lng,
+            lat: this.place.placeLocation.lat,
+            lng: this.place.placeLocation.lng,
           },
           selectable: false,
           closeButtonText: 'Close',
-          title: this.place.location.address,
+          title: this.place.placeLocation.address,
         },
       })
       .then((modalEl) => {

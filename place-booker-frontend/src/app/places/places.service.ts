@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, switchMap, take, tap } from 'rxjs';
-import { Place } from './place.model';
+import {
+  BehaviorSubject,
+  catchError,
+  map,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from 'rxjs';
+import { Place, User } from './place.model';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { PlaceLocation } from './location.model';
+import { ToastController } from '@ionic/angular';
 
 interface PlaceResponse {
   id: number;
@@ -34,7 +44,11 @@ interface PlaceResponse {
 export class PlacesService {
   private _places = new BehaviorSubject<Place[]>([]);
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private toastCtrl: ToastController
+  ) {}
 
   fetchPlaces() {
     return this.authService.token.pipe(
@@ -96,6 +110,83 @@ export class PlacesService {
               `&key=${environment.googleMapsAPIKey}`,
           }
         );
+      })
+    );
+  }
+
+  addPlace(
+    title: string,
+    description: string,
+    price: number,
+    dateFrom: Date,
+    dateTo: Date,
+    imageUrl: string,
+    location: PlaceLocation
+  ) {
+    let generatedId: number;
+    let fetchedUserId: number | null;
+    let newPlace: Place;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap((userId) => {
+        fetchedUserId = userId;
+        return this.authService.token;
+      }),
+      take(1),
+      switchMap((token) => {
+        if (!fetchedUserId) {
+          throw new Error('No user found');
+        }
+        const user: User = {
+          id: fetchedUserId,
+          email: null,
+          firstName: null,
+          lastName: null,
+          age: null,
+        };
+        console.log(location);
+        newPlace = new Place(
+          null,
+          title,
+          description,
+          imageUrl,
+          price,
+          dateFrom,
+          dateTo,
+          user,
+          location
+        );
+        const headers = this.createAuthHeader(token);
+
+        return this.http
+          .post<{ id: number }>(`${environment.apiUrl}/places`, newPlace, {
+            headers: headers,
+          })
+          .pipe(
+            catchError((error) => {
+              console.error(error);
+              const errorMessage =
+                'An error occurred while creating the place.';
+              this.toastCtrl
+                .create({
+                  message: errorMessage,
+                  duration: 3000,
+                  position: 'bottom',
+                })
+                .then((toast) => toast.present());
+
+              return throwError(error);
+            })
+          );
+      }),
+      switchMap((resData) => {
+        generatedId = resData.id;
+        return this.places;
+      }),
+      take(1),
+      tap((places) => {
+        newPlace.id = generatedId;
+        this._places.next(places.concat(newPlace));
       })
     );
   }

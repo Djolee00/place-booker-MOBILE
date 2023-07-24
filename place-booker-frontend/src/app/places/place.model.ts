@@ -10,7 +10,7 @@ export interface User {
 
 export class Place {
   constructor(
-    public id: number,
+    public id: number | null,
     public title: string,
     public description: string,
     public imageUrl: string,
@@ -18,6 +18,6 @@ export class Place {
     public availableFrom: Date,
     public availableTo: Date,
     public user: User,
-    public location: PlaceLocation
+    public placeLocation: PlaceLocation
   ) {}
 }

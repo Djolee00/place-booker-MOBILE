@@ -44,7 +44,8 @@ export class LocationPickerComponent implements OnInit {
           )
           .subscribe((staticMapImageUrl) => {
             pickedLocation.staticMapImageUrl = staticMapImageUrl;
-            this.selectedLocationImage = staticMapImageUrl;
+            this.selectedLocationImage =
+              staticMapImageUrl + `&key=${environment.googleMapsAPIKey}`;
             this.isLoading = false;
             this.locationPick.emit(pickedLocation);
           });
@@ -70,7 +71,6 @@ export class LocationPickerComponent implements OnInit {
 
   private getMapImage(lat: number, lng: number, zoom: number) {
     return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=500x300&maptype=roadmap
-    &markers=color:red%7Clabel:Place%7C${lat},${lng}
-    &key=${environment.googleMapsAPIKey}`;
+    &markers=color:red%7Clabel:Place%7C${lat},${lng}`;
   }
 }
