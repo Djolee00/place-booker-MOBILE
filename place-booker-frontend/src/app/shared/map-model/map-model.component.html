@@ -2,7 +2,9 @@
   <ion-toolbar>
     <ion-title> {{ title }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button (click)="onCancel()"> {{ closeButtonText }} </ion-button>
+      <ion-button (click)="onCancel()" color="dark">
+        {{ closeButtonText }}
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

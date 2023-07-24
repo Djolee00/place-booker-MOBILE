@@ -8,7 +8,11 @@
     </ion-buttons>
     <ion-title>Edit Offer</ion-title>
     <ion-buttons slot="primary">
-      <ion-button (click)="onUpdateOffer()" [disabled]="!form?.valid">
+      <ion-button
+        (click)="onUpdateOffer()"
+        [disabled]="!form?.valid"
+        color="dark"
+      >
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
