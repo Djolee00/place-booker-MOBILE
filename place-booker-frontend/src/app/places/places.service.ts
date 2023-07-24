@@ -3,6 +3,7 @@ import {
   BehaviorSubject,
   catchError,
   map,
+  of,
   switchMap,
   take,
   tap,
@@ -157,7 +158,6 @@ export class PlacesService {
           location
         );
         const headers = this.createAuthHeader(token);
-
         return this.http
           .post<{ id: number }>(`${environment.apiUrl}/places`, newPlace, {
             headers: headers,
@@ -187,6 +187,56 @@ export class PlacesService {
       tap((places) => {
         newPlace.id = generatedId;
         this._places.next(places.concat(newPlace));
+      })
+    );
+  }
+
+  updatePlace(placeId: number, title: string, description: string) {
+    let updatedPlaces: Place[];
+    let fetchedToken: string | null;
+    return this.authService.token.pipe(
+      take(1),
+      switchMap((token) => {
+        fetchedToken = token;
+        return this.places;
+      }),
+      take(1),
+      switchMap((places) => {
+        if (!places || places.length === 0) {
+          return this.fetchPlaces();
+        } else {
+          return of(places);
+        }
+      }),
+      switchMap((places) => {
+        const updatedPlaceIndex = places.findIndex((pl) => pl.id == placeId);
+        updatedPlaces = [...places];
+        const oldPlace = updatedPlaces[updatedPlaceIndex];
+        updatedPlaces[updatedPlaceIndex] = new Place(
+          oldPlace.id,
+          title,
+          description,
+          oldPlace.imageUrl,
+          oldPlace.price,
+          oldPlace.availableFrom,
+          oldPlace.availableTo,
+          oldPlace.user,
+          oldPlace.placeLocation
+        );
+        const headers = this.createAuthHeader(fetchedToken);
+        return this.http.put(
+          `${environment.apiUrl}/places/${placeId}`,
+          {
+            ...updatedPlaces[updatedPlaceIndex],
+            id: null,
+          },
+          {
+            headers: headers,
+          }
+        );
+      }),
+      tap(() => {
+        this._places.next(updatedPlaces);
       })
     );
   }
