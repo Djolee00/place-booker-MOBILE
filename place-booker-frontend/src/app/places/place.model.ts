@@ -2,10 +2,10 @@ import { PlaceLocation } from './location.model';
 
 export interface User {
   id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  age: number;
+  email: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  age: number | null;
 }
 
 export class Place {

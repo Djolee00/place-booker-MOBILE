@@ -159,20 +159,19 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
             .then((loadingEl) => {
               loadingEl.present();
               const data = resultData.data.bookingData;
-              // this.bookingService
-              //   .addBooking(
-              //     this.place.id,
-              //     this.place.title,
-              //     this.place.imageUrl,
-              //     data.firstName,
-              //     data.lastName,
-              //     data.guestNumber,
-              //     data.startDate,
-              //     data.endDate
-              //   )
-              // .subscribe(() => {
-              //   loadingEl.dismiss();
-              // });
+              this.bookingService
+                .addBooking(
+                  this.place,
+                  data.title,
+                  data.firstName,
+                  data.lastName,
+                  data.guestNumber,
+                  data.startDate,
+                  data.endDate
+                )
+                .subscribe(() => {
+                  loadingEl.dismiss();
+                });
             });
         }
       });

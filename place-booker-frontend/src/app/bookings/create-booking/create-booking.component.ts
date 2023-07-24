@@ -38,6 +38,9 @@ export class CreateBookingComponent implements OnInit {
               6 * 24 * 60 * 60 * 1000 -
               new Date(this.startDate).getTime())
       ).toISOString();
+    } else {
+      this.startDate = availableFrom.toISOString();
+      this.endDate = availableTo.toISOString();
     }
   }
 
@@ -52,6 +55,7 @@ export class CreateBookingComponent implements OnInit {
     this.modalCtrl.dismiss(
       {
         bookingData: {
+          title: this.form.value['title'],
           firstName: this.form.value['first-name'],
           lastName: this.form.value['last-name'],
           guestNumber: +this.form.value['guest-number'],
