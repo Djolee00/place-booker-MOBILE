@@ -2,7 +2,6 @@ package com.placebooker.domain;
 
 import com.placebooker.constraint.DateOrder;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
@@ -45,13 +44,11 @@ public class Booking {
   private Integer guestNumber;
 
   @NotNull
-  @FutureOrPresent
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "booked_from")
   private LocalDate bookedFrom;
 
   @NotNull
-  @FutureOrPresent
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   @Column(name = "booked_to")
   private LocalDate bookedTo;
