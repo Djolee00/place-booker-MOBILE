@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
     registry
         .addMapping("/**")
         .allowedOrigins(
-            "http://localhost:8100") // Replace with the actual origin of your frontend application
+            "http://localhost:8100","http://localhost:80") // Replace with the actual origin of your frontend application
         .allowedMethods("*")
         .allowedHeaders("*")
         .allowCredentials(true)
