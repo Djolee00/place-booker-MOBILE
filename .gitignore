@@ -62,3 +62,5 @@ place-booker-backend/log/
 /place-booker-frontend/src/environments/environment.prod.ts
 place-booker-frontend/src/environments/environment.ts
 place-booker-frontend/src/environments/environment.prod.ts
+
+docker-compose.yml

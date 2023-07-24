@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: ./place-booker-backend 
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://host.docker.internal:***PORT OF POSTGRESS***/place_booker
+      SPRING_DATASOURCE_USERNAME: ***USERNAME***
+      SPRING_DATASOURCE_PASSWORD: ***PASSWORD***
+
+  database:
+    image: postgres
+    environment:
+      POSTGRES_USER: ***SERNAME***
+      POSTGRES_PASSWORD: ***PASSWORD***
+      POSTGRES_DB: place_booker
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./place-booker-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
+volumes:
+  db-data:
