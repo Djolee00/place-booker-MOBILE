@@ -3,10 +3,15 @@ import { LocationPickerComponent } from './pickers/location-picker/location-pick
 import { MapModelComponent } from './map-model/map-model.component';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { ImagePickerComponent } from './pickers/image-picker/image-picker.component';
 
 @NgModule({
-  declarations: [LocationPickerComponent, MapModelComponent],
+  declarations: [
+    LocationPickerComponent,
+    MapModelComponent,
+    ImagePickerComponent,
+  ],
   imports: [CommonModule, IonicModule],
-  exports: [LocationPickerComponent, MapModelComponent],
+  exports: [LocationPickerComponent, MapModelComponent, ImagePickerComponent],
 })
 export class SharedModule {}
