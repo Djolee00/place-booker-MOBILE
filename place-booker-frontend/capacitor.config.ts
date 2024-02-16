@@ -1,12 +1,15 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.placebooker',
   appName: 'place-booker-frontend',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
-  }
+    allowNavigation: [],
+  },
+  android: {
+    allowMixedContent: true,
+  },
 };
 
 export default config;
