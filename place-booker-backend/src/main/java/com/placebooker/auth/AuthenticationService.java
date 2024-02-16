@@ -6,7 +6,7 @@ import com.placebooker.auth.model.response.JwtAuthenticationResponse;
 
 public interface AuthenticationService {
 
-  JwtAuthenticationResponse signUp(SignUpRequest request);
+    JwtAuthenticationResponse signUp(SignUpRequest request);
 
-  JwtAuthenticationResponse signIn(SignInRequest request);
+    JwtAuthenticationResponse signIn(SignInRequest request);
 }

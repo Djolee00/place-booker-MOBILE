@@ -13,20 +13,21 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Override
-  public UserDetailsService userDetailsService() {
-    return username ->
-        userRepository
-            .findByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-  }
+    @Override
+    public UserDetailsService userDetailsService() {
+        return username ->
+                userRepository
+                        .findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 
-  @Override
-  public User getUserById(Long id) {
-    return userRepository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("User with ID: " + id + " can't be found"));
-  }
+    @Override
+    public User getUserById(Long id) {
+        return userRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("User with ID: " + id + " can't be found"));
+    }
 }

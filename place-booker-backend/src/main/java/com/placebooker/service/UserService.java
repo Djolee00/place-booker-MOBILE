@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService {
 
-  UserDetailsService userDetailsService();
+    UserDetailsService userDetailsService();
 
-  User getUserById(Long id);
+    User getUserById(Long id);
 }

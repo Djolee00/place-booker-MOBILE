@@ -13,19 +13,19 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = DateOrderValidator.class)
 public @interface DateOrder {
 
-  String message() default "Invalid date order";
+    String message() default "Invalid date order";
 
-  Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 
-  String dateFromField();
+    String dateFromField();
 
-  String dateToField();
+    String dateToField();
 
-  @Target({ElementType.TYPE})
-  @Retention(RetentionPolicy.RUNTIME)
-  @interface List {
-    DateOrder[] value();
-  }
+    @Target({ElementType.TYPE})
+    @Retention(RetentionPolicy.RUNTIME)
+    @interface List {
+        DateOrder[] value();
+    }
 }

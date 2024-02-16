@@ -6,11 +6,11 @@ import java.util.Set;
 
 public interface BookingService {
 
-  Set<Booking> getBookingsByUser(User user);
+    Set<Booking> getBookingsByUser(User user);
 
-  Booking getBookingById(Long id);
+    Booking getBookingById(Long id);
 
-  void removeBooking(Booking booking);
+    void removeBooking(Booking booking);
 
-  Booking saveBooking(Booking booking);
+    Booking saveBooking(Booking booking);
 }

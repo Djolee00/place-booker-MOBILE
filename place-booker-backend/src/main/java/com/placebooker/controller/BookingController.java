@@ -19,42 +19,42 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-  private final UserService userService;
-  private final BookingService bookingService;
-  private final PlaceService placeService;
+    private final UserService userService;
+    private final BookingService bookingService;
+    private final PlaceService placeService;
 
-  public BookingController(
-      UserService userService, BookingService bookingService, PlaceService placeService) {
-    this.userService = userService;
-    this.bookingService = bookingService;
-    this.placeService = placeService;
-  }
+    public BookingController(
+            UserService userService, BookingService bookingService, PlaceService placeService) {
+        this.userService = userService;
+        this.bookingService = bookingService;
+        this.placeService = placeService;
+    }
 
-  @GetMapping
-  public ResponseEntity<Set<BookingDto>> getBookingsByUser(@RequestParam Long userId) {
-    User user = userService.getUserById(userId);
-    Set<Booking> bookings = bookingService.getBookingsByUser(user);
-    return ResponseEntity.ok(
-        bookings.stream().map(BookingMapper::toDto).collect(Collectors.toSet()));
-  }
+    @GetMapping
+    public ResponseEntity<Set<BookingDto>> getBookingsByUser(@RequestParam Long userId) {
+        User user = userService.getUserById(userId);
+        Set<Booking> bookings = bookingService.getBookingsByUser(user);
+        return ResponseEntity.ok(
+                bookings.stream().map(BookingMapper::toDto).collect(Collectors.toSet()));
+    }
 
-  @DeleteMapping("/{id}")
-  public void deleteBooking(@PathVariable Long id) {
-    Booking booking = bookingService.getBookingById(id);
-    bookingService.removeBooking(booking);
-  }
+    @DeleteMapping("/{id}")
+    public void deleteBooking(@PathVariable Long id) {
+        Booking booking = bookingService.getBookingById(id);
+        bookingService.removeBooking(booking);
+    }
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingDto bookingDto) {
-    User user = userService.getUserById(bookingDto.user().id());
-    Place place = placeService.getPlaceById(bookingDto.place().id());
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingDto bookingDto) {
+        User user = userService.getUserById(bookingDto.user().id());
+        Place place = placeService.getPlaceById(bookingDto.place().id());
 
-    Booking booking = BookingMapper.toEntity(bookingDto);
-    booking.setUser(user);
-    booking.setPlace(place);
+        Booking booking = BookingMapper.toEntity(bookingDto);
+        booking.setUser(user);
+        booking.setPlace(place);
 
-    booking = bookingService.saveBooking(booking);
-    return ResponseEntity.ok(BookingMapper.toDto(booking));
-  }
+        booking = bookingService.saveBooking(booking);
+        return ResponseEntity.ok(BookingMapper.toDto(booking));
+    }
 }

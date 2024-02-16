@@ -11,16 +11,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @DateOrder(
-    dateFromField = "bookedFrom",
-    dateToField = "bookedTo",
-    message = "Booked from date must be less or equal to booked to date")
+        dateFromField = "bookedFrom",
+        dateToField = "bookedTo",
+        message = "Booked from date must be less or equal to booked to date")
 public record BookingDto(
-    Long id,
-    @NotBlank String title,
-    @NotBlank String firstName,
-    @NotBlank String lastName,
-    @NotNull Integer guestNumber,
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedFrom,
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedTo,
-    @NotNull UserDto user,
-    @NotNull PlaceDto place) {}
+        Long id,
+        @NotBlank String title,
+        @NotBlank String firstName,
+        @NotBlank String lastName,
+        @NotNull Integer guestNumber,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedFrom,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedTo,
+        @NotNull UserDto user,
+        @NotNull PlaceDto place) {}

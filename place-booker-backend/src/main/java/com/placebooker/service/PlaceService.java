@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface PlaceService {
 
-  List<Place> getPlaces(Pageable pageable);
+    List<Place> getPlaces(Pageable pageable);
 
-  Place getPlaceById(Long id);
+    Place getPlaceById(Long id);
 
-  Place saveOrUpdate(Place place);
+    Place saveOrUpdate(Place place);
 }

@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record PlaceLocationDto(
-    @NotBlank String address,
-    @NotBlank String staticMapImageUrl,
-    @NotBlank String lat,
-    @NotBlank String lng) {}
+        @NotBlank String address,
+        @NotBlank String staticMapImageUrl,
+        @NotBlank String lat,
+        @NotBlank String lng) {}

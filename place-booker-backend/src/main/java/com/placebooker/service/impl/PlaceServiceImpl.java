@@ -14,25 +14,26 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
 
-  private final PlaceRepository placeRepository;
+    private final PlaceRepository placeRepository;
 
-  @Override
-  @Transactional(readOnly = true)
-  public List<Place> getPlaces(Pageable pageable) {
-    return placeRepository.findAll(pageable).getContent();
-  }
+    @Override
+    @Transactional(readOnly = true)
+    public List<Place> getPlaces(Pageable pageable) {
+        return placeRepository.findAll(pageable).getContent();
+    }
 
-  @Override
-  @Transactional(readOnly = true)
-  public Place getPlaceById(Long id) {
-    return placeRepository
-        .findById(id)
-        .orElseThrow(() -> new NotFoundException("Place with ID: " + id + " can't be found"));
-  }
+    @Override
+    @Transactional(readOnly = true)
+    public Place getPlaceById(Long id) {
+        return placeRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new NotFoundException("Place with ID: " + id + " can't be found"));
+    }
 
-  @Override
-  @Transactional
-  public Place saveOrUpdate(Place place) {
-    return placeRepository.save(place);
-  }
+    @Override
+    @Transactional
+    public Place saveOrUpdate(Place place) {
+        return placeRepository.save(place);
+    }
 }
