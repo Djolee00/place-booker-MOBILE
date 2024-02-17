@@ -18,6 +18,7 @@ export class Place {
     public availableFrom: Date,
     public availableTo: Date,
     public user: User,
-    public placeLocation: PlaceLocation
+    public placeLocation: PlaceLocation,
+    public placeImageUrl: string | null
   ) {}
 }

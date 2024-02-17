@@ -10,41 +10,56 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="ion-text-center" *ngIf="isLoading">
+<ion-content [fullscreen]="true" class="content-container">
+  <div class="loading-spinner" *ngIf="isLoading">
     <ion-spinner></ion-spinner>
   </div>
-  <ion-grid fixed class="ion-no-padding" *ngIf="!isLoading">
+
+  <ion-grid fixed class="place-details-grid" *ngIf="!isLoading">
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-no-padding">
-        <ion-img [src]="place.imageUrl"></ion-img>
+      <ion-col size="12" class="ion-text-center ion-padding">
+        <ion-img [src]="place.imageUrl" class="place-image"></ion-img>
       </ion-col>
     </ion-row>
+
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center ion-padding">
-        <p>{{place.description}}</p>
+      <ion-col size="12" class="ion-text-center ion-padding">
+        <p class="place-description">{{ place.description }}</p>
       </ion-col>
     </ion-row>
+
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-padding ion-text-center">
-        <p>{{place.placeLocation.address}}</p>
+      <ion-col size="12" class="ion-text-center ion-padding">
+        <p class="place-address">{{ place.placeLocation.address }}</p>
       </ion-col>
     </ion-row>
+
     <ion-row>
-      <ion-col size-sm="6" offset-sm="3" class="ion-no-padding">
+      <ion-col size="12" class="ion-text-center ion-padding">
         <ion-img
-          class="location-image"
           [src]="place.placeLocation.staticMapImageUrl"
+          class="location-image"
           role="button"
           (click)="onShowFullMap()"
-          alt="No image"
+          alt="Map Image"
         ></ion-img>
       </ion-col>
     </ion-row>
+
+    <ion-row>
+      <ion-col size="12" class="ion-text-center ion-padding">
+        <ion-img
+          [src]="place.placeImageUrl"
+          *ngIf="place.placeImageUrl"
+          class="place-image"
+        ></ion-img>
+      </ion-col>
+    </ion-row>
+
     <ion-row *ngIf="isBookable">
-      <ion-col size-sm="6" offset-sm="3" class="ion-text-center">
-        <ion-button color="dark" class="ion-margin" (click)="onBookPlace()"
-          >Book</ion-button
+      <ion-col size="12" class="ion-text-center ion-padding">
+        <ion-button color="dark" (click)="onBookPlace()" class="book-button"
+          >Book Now</ion-button
         >
       </ion-col>
     </ion-row>
