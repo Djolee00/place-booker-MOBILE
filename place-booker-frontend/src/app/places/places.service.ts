@@ -37,6 +37,7 @@ interface PlaceResponse {
     lat: number;
     lng: number;
   };
+  placeImageUrl: string | null;
 }
 
 @Injectable({
@@ -71,7 +72,8 @@ export class PlacesService {
             new Date(placeData.availableFrom),
             new Date(placeData.availableTo),
             placeData.user,
-            placeData.placeLocation
+            placeData.placeLocation,
+            placeData.placeImageUrl
           );
         });
       }),
@@ -95,6 +97,11 @@ export class PlacesService {
         );
       }),
       map((placeData) => {
+        let imageUrl: string;
+        if (placeData.placeImageUrl) {
+          imageUrl = 'data:image/jpeg;base64,' + placeData.placeImageUrl;
+        }
+
         return new Place(
           placeData.id,
           placeData.title,
@@ -109,7 +116,8 @@ export class PlacesService {
             staticMapImageUrl:
               placeData.placeLocation.staticMapImageUrl +
               `&key=${environment.googleMapsAPIKey}`,
-          }
+          },
+          imageUrl!
         );
       })
     );
@@ -122,7 +130,8 @@ export class PlacesService {
     dateFrom: Date,
     dateTo: Date,
     imageUrl: string,
-    location: PlaceLocation
+    location: PlaceLocation,
+    image: Blob
   ) {
     let generatedId: number;
     let fetchedUserId: number | null;
@@ -145,7 +154,6 @@ export class PlacesService {
           lastName: null,
           age: null,
         };
-        console.log(location);
         newPlace = new Place(
           null,
           title,
@@ -155,11 +163,25 @@ export class PlacesService {
           dateFrom,
           dateTo,
           user,
-          location
+          location,
+          null
         );
+        const newPlaceJson = JSON.stringify(newPlace);
+        const newPlaceJsonBlob = new Blob([newPlaceJson], {
+          type: 'application/json',
+        });
+        const formData = new FormData();
+        formData.append('place', newPlaceJsonBlob);
+
+        if (image.type === 'image/png') {
+          formData.append('image', image, 'Image of place.png');
+        } else {
+          formData.append('image', image, 'Image of place.jpeg');
+        }
         const headers = this.createAuthHeader(token);
+        headers.append('Content-Type', 'multipart/mixed');
         return this.http
-          .post<{ id: number }>(`${environment.apiUrl}/places`, newPlace, {
+          .post<{ id: number }>(`${environment.apiUrl}/places`, formData, {
             headers: headers,
           })
           .pipe(
@@ -221,7 +243,8 @@ export class PlacesService {
           oldPlace.availableFrom,
           oldPlace.availableTo,
           oldPlace.user,
-          oldPlace.placeLocation
+          oldPlace.placeLocation,
+          oldPlace.placeImageUrl
         );
         const headers = this.createAuthHeader(fetchedToken);
         return this.http.put(

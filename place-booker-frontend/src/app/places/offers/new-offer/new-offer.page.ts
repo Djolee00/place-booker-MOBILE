@@ -23,6 +23,7 @@ function base64toBlob(base64Data: string, contentType: string) {
     }
     byteArrays[sliceIndex] = new Uint8Array(bytes);
   }
+
   return new Blob(byteArrays, { type: contentType });
 }
 
@@ -91,7 +92,8 @@ export class NewOfferPage implements OnInit {
             new Date(this.form.value.dateFrom),
             new Date(this.form.value.dateTo),
             this.form.value.imageUrl,
-            this.form.value.location
+            this.form.value.location,
+            this.form.value.image
           )
           .subscribe(
             () => {
