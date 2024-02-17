@@ -1,5 +1,6 @@
 package com.placebooker.exception;
 
+import com.placebooker.exception.custom.FileServiceException;
 import com.placebooker.exception.custom.NotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -51,6 +52,13 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<CustomException> onIllegalArgumentException(RuntimeException ex) {
+        CustomException exception =
+                new CustomException(ex.getMessage(), HttpStatus.BAD_REQUEST, OffsetDateTime.now());
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileServiceException.class)
+    ResponseEntity<CustomException> onFileServiceException(FileServiceException ex) {
         CustomException exception =
                 new CustomException(ex.getMessage(), HttpStatus.BAD_REQUEST, OffsetDateTime.now());
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);

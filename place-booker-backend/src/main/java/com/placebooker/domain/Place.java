@@ -61,6 +61,10 @@ public class Place {
     @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
     private PlaceLocation placeLocation;
 
+    @ManyToOne
+    @JoinColumn(name = "place_image_id")
+    private PlaceImage placeImage;
+
     public void setPlaceLocation(PlaceLocation placeLocation) {
         if (placeLocation != null) {
             placeLocation.setPlace(this);

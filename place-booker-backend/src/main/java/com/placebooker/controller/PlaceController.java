@@ -6,15 +6,22 @@ import com.placebooker.domain.User;
 import com.placebooker.dto.PlaceDto;
 import com.placebooker.mapper.PlaceLocationMapper;
 import com.placebooker.mapper.PlaceMapper;
+import com.placebooker.service.PlaceImageService;
 import com.placebooker.service.PlaceService;
 import com.placebooker.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/places")
@@ -22,10 +29,15 @@ public class PlaceController {
 
     private final PlaceService placeService;
     private final UserService userService;
+    private final PlaceImageService placeImageService;
 
-    public PlaceController(PlaceService placeService, UserService userService) {
+    public PlaceController(
+            PlaceService placeService,
+            UserService userService,
+            PlaceImageService placeImageService) {
         this.placeService = placeService;
         this.userService = userService;
+        this.placeImageService = placeImageService;
     }
 
     @GetMapping
@@ -38,12 +50,32 @@ public class PlaceController {
     @GetMapping("/{id}")
     public ResponseEntity<PlaceDto> getPlace(@PathVariable Long id) {
         Place place = placeService.getPlaceById(id);
-        return ResponseEntity.ok(PlaceMapper.toDto(place));
+        Resource placeImage;
+        PlaceDto placeDto;
+        if (place.getPlaceImage() != null) {
+            placeImage = placeImageService.downloadFile(place.getPlaceImage());
+            try {
+                placeDto =
+                        PlaceMapper.toDto(
+                                place,
+                                Base64.getEncoder()
+                                        .encodeToString(placeImage.getContentAsByteArray()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            placeDto = PlaceMapper.toDto(place);
+        }
+
+        return ResponseEntity.ok(placeDto);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Long> createPlace(@Valid @RequestBody PlaceDto placeDto) {
+    public ResponseEntity<Long> createPlace(
+            @Valid @RequestPart("place") PlaceDto placeDto,
+            @NotNull @RequestPart("image") MultipartFile file) {
+
         User user = userService.getUserById(placeDto.user().id());
         PlaceLocation placeLocation = PlaceLocationMapper.toEntity(placeDto.placeLocation());
 
@@ -51,7 +83,7 @@ public class PlaceController {
         place.setUser(user);
         place.setPlaceLocation(placeLocation);
 
-        return ResponseEntity.ok(placeService.saveOrUpdate(place).getId());
+        return ResponseEntity.ok(placeService.saveOrUpdate(place, file).getId());
     }
 
     @PutMapping("/{id}")

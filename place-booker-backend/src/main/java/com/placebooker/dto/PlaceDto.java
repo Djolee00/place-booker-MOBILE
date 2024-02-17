@@ -27,4 +27,5 @@ public record PlaceDto(
         @NotNull @FutureOrPresent @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                 LocalDate availableTo,
         @NotNull UserDto user,
-        @NotNull PlaceLocationDto placeLocation) {}
+        @NotNull PlaceLocationDto placeLocation,
+        String placeImageUrl) {}
