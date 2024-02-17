@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -19,7 +20,9 @@ export class ImagePickerComponent implements OnInit {
   @ViewChild('filePicker') filePicker: ElementRef<HTMLInputElement>;
 
   @Output()
-  imagePick = new EventEmitter<string>();
+  imagePick = new EventEmitter<string | File>();
+
+  @Input() showPreview = false;
 
   selectedImage: string;
   usePicker = false;
@@ -34,14 +37,16 @@ export class ImagePickerComponent implements OnInit {
     console.log('Desktop:', this.platform.is('desktop'));
     if (
       (this.platform.is('mobile') && !this.platform.is('hybrid')) ||
-      this.platform.is('desktop')
+      (this.platform.is('desktop') &&
+        !this.platform.is('android') &&
+        !this.platform.is('ios'))
     ) {
       this.usePicker = true;
     }
   }
 
   onPickImage() {
-    if (!Capacitor.isPluginAvailable('Camera') || this.usePicker) {
+    if (!Capacitor.isPluginAvailable('Camera')) {
       this.filePicker.nativeElement.click();
       return;
     }
@@ -61,6 +66,9 @@ export class ImagePickerComponent implements OnInit {
       })
       .catch((error) => {
         console.log(error);
+        if (this.usePicker) {
+          this.filePicker.nativeElement.click();
+        }
         return false;
       });
   }
@@ -74,6 +82,7 @@ export class ImagePickerComponent implements OnInit {
     fr.onload = () => {
       const dataUrl = fr.result?.toString();
       this.selectedImage = dataUrl!;
+      this.imagePick.emit(pickedFile);
     };
     fr.readAsDataURL(pickedFile);
   }
