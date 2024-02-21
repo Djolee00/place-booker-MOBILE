@@ -38,6 +38,11 @@ Users can browse and explore all available places within the application, viewin
 #### 7. Bookable Places
 The application also provides a list of bookable places, allowing users to identify destinations available for reservations.
 
+## Native Functionalities
+#### 1. Auto-Locate
+User can use **auto-locate** functionality on both iOS and Android devices (also web browser if it is supported). Geolocation Capacitor plugin is used for implementation of this feature.
+#### 2. Camera
+While creating travel place users can open their **camera** (or pick photo from **file-manage**) to be displayed alongside with created destination.
 
 ## Domain
 
