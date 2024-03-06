@@ -28,6 +28,8 @@ public class GlobalExceptionHandler {
     @Value("${application.url}")
     private String applicationUrl;
 
+    private static final String ERROR_PATH = "/errors/";
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ProblemDetail> onMethodArgumentNotValidExceptionI(
             MethodArgumentNotValidException ex, HttpServletRequest request) {
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(
                         HttpStatus.UNPROCESSABLE_ENTITY, violations.toString());
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "invalid-request"));
         problemDetail.setTitle("Invalid request");
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setProperty("errors", violations);
@@ -51,7 +53,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("Requested resource doesn't exist.");
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "not-found"));
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
@@ -64,7 +66,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
         problemDetail.setTitle("Illegal arguments");
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "invalid-request"));
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
@@ -77,7 +79,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
         problemDetail.setTitle("File Service occurred an error");
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "file-service"));
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
@@ -92,7 +94,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(
                         HttpStatus.UNPROCESSABLE_ENTITY, violations.toString());
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "invalid-request"));
         problemDetail.setTitle("Invalid request");
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setProperty("errors", violations);
@@ -107,7 +109,7 @@ public class GlobalExceptionHandler {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
         problemDetail.setTitle("Bad credentials. Invalid username/password");
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "authentication"));
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
@@ -119,7 +121,7 @@ public class GlobalExceptionHandler {
             Exception ex, HttpServletRequest request) {
         ProblemDetail problemDetail =
                 ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        problemDetail.setType(createExceptionTypeUri(ex.getClass()));
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "internal-server-error"));
         problemDetail.setTitle("Error occurred");
         problemDetail.setProperty("timestamp", Instant.now());
         problemDetail.setInstance(URI.create(request.getRequestURI()));
@@ -156,12 +158,6 @@ public class GlobalExceptionHandler {
                                         constraintViolation.getMessage(),
                                         OffsetDateTime.now()))
                 .collect(Collectors.toSet());
-    }
-
-    private URI createExceptionTypeUri(Class<? extends Throwable> exceptionClass) {
-        String namespace = applicationUrl + "/exceptions/";
-        String exceptionName = exceptionClass.getSimpleName();
-        return URI.create(namespace + exceptionName);
     }
 }
 

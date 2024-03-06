@@ -29,8 +29,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, e.getMessage());
         problemDetail.setTitle("Authentication required for this endpoint");
         problemDetail.setProperty("timestamp", Instant.now());
-        problemDetail.setType(
-                URI.create("http://localhost:8080/errors/" + e.getClass().getSimpleName()));
+        problemDetail.setType(URI.create("http://localhost:8080/errors/authentication"));
         problemDetail.setInstance(URI.create(request.getRequestURI()));
         mapper.writeValue(response.getOutputStream(), problemDetail);
         response.getOutputStream().flush();
