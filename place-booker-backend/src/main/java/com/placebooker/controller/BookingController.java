@@ -39,13 +39,13 @@ public class BookingController {
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBooking(@PathVariable Long id) {
         Booking booking = bookingService.getBookingById(id);
         bookingService.removeBooking(booking);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BookingDto> createBooking(@Valid @RequestBody BookingDto bookingDto) {
         User user = userService.getUserById(bookingDto.user().id());
         Place place = placeService.getPlaceById(bookingDto.place().id());
@@ -55,6 +55,6 @@ public class BookingController {
         booking.setPlace(place);
 
         booking = bookingService.saveBooking(booking);
-        return ResponseEntity.ok(BookingMapper.toDto(booking));
+        return new ResponseEntity<>(BookingMapper.toDto(booking), HttpStatus.OK);
     }
 }

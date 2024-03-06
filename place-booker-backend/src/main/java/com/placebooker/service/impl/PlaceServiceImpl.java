@@ -45,6 +45,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional
     public Place saveOrUpdate(Place place) {
         return placeRepository.save(place);
     }

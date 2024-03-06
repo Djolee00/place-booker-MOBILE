@@ -10,7 +10,6 @@ import com.placebooker.service.PlaceImageService;
 import com.placebooker.service.PlaceService;
 import com.placebooker.service.UserService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -18,10 +17,8 @@ import java.util.stream.Collectors;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/places")
@@ -70,11 +67,24 @@ public class PlaceController {
         return ResponseEntity.ok(placeDto);
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Long> createPlace(
-            @Valid @RequestPart("place") PlaceDto placeDto,
-            @NotNull @RequestPart("image") MultipartFile file) {
+    //    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    //    public ResponseEntity<Long> createPlace(
+    //            @Valid @RequestPart("place") PlaceDto placeDto,
+    //            @NotNull @RequestPart("image") MultipartFile file) {
+    //
+    //        User user = userService.getUserById(placeDto.user().id());
+    //        PlaceLocation placeLocation = PlaceLocationMapper.toEntity(placeDto.placeLocation());
+    //
+    //        Place place = PlaceMapper.toEntity(placeDto);
+    //        place.setUser(user);
+    //        place.setPlaceLocation(placeLocation);
+    //
+    //        return new ResponseEntity<>(
+    //                placeService.saveOrUpdate(place, file).getId(), HttpStatus.CREATED);
+    //    }
+
+    @PostMapping
+    public ResponseEntity<Long> createPlace(@RequestBody PlaceDto placeDto) {
 
         User user = userService.getUserById(placeDto.user().id());
         PlaceLocation placeLocation = PlaceLocationMapper.toEntity(placeDto.placeLocation());
@@ -83,7 +93,7 @@ public class PlaceController {
         place.setUser(user);
         place.setPlaceLocation(placeLocation);
 
-        return ResponseEntity.ok(placeService.saveOrUpdate(place, file).getId());
+        return new ResponseEntity<>(placeService.saveOrUpdate(place).getId(), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
