@@ -8,7 +8,7 @@ public interface JwtService {
 
     String generateToken(UserDetails userDetails);
 
-    boolean isTokenValid(String token, UserDetails userDetails);
+    boolean validateToken(String token, UserDetails userDetails);
 
     Date extractExpiration(String token);
 }

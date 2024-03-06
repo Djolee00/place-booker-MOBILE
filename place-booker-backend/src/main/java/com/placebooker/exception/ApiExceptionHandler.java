@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -58,7 +59,7 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(FileServiceException.class)
-    ResponseEntity<CustomException> onFileServiceException(FileServiceException ex) {
+    public ResponseEntity<CustomException> onFileServiceException(FileServiceException ex) {
         CustomException exception =
                 new CustomException(ex.getMessage(), HttpStatus.BAD_REQUEST, OffsetDateTime.now());
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
@@ -76,6 +77,16 @@ public class ApiExceptionHandler {
         }
 
         return new ErrorResponse(violations);
+    }
+
+    @ExceptionHandler({BadCredentialsException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ResponseEntity<CustomException> handleBadCredentialsException(
+            BadCredentialsException ex) {
+        CustomException exception =
+                new CustomException(ex.getMessage(), HttpStatus.UNAUTHORIZED, OffsetDateTime.now());
+        return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
     }
 }
 

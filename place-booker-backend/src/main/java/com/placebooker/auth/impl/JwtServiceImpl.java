@@ -1,6 +1,7 @@
 package com.placebooker.auth.impl;
 
 import com.placebooker.auth.JwtService;
+import com.placebooker.exception.custom.InvalidJwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -30,9 +31,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    public boolean validateToken(String token, UserDetails userDetails) {
+        try {
+            final String userName = extractUserName(token);
+            return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        } catch (Exception e) {
+            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
+        }
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers) {
