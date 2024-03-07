@@ -2,6 +2,7 @@ package com.placebooker.controller;
 
 import com.placebooker.domain.Place;
 import com.placebooker.domain.PlaceLocation;
+import com.placebooker.domain.Role;
 import com.placebooker.domain.User;
 import com.placebooker.dto.PlaceDto;
 import com.placebooker.mapper.PlaceLocationMapper;
@@ -18,6 +19,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,6 +40,7 @@ public class PlaceController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole(\"" + Role.RoleCode.Code.USER_BASIC + "\")")
     public ResponseEntity<List<PlaceDto>> getPlaces(Pageable pageable) {
         List<Place> places = placeService.getPlaces(pageable);
         return ResponseEntity.ok(
@@ -45,6 +48,7 @@ public class PlaceController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole(\"" + Role.RoleCode.Code.USER_BASIC + "\")")
     public ResponseEntity<PlaceDto> getPlace(@PathVariable Long id) {
         Place place = placeService.getPlaceById(id);
         Resource placeImage;
@@ -84,6 +88,7 @@ public class PlaceController {
     //    }
 
     @PostMapping
+    @PreAuthorize("hasRole(\"" + Role.RoleCode.Code.USER_PRO + "\")")
     public ResponseEntity<Long> createPlace(@RequestBody PlaceDto placeDto) {
 
         User user = userService.getUserById(placeDto.user().id());
@@ -97,6 +102,7 @@ public class PlaceController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole(\"" + Role.RoleCode.Code.USER_PRO + "\")")
     public ResponseEntity<PlaceDto> updatePlace(
             @PathVariable Long id, @Valid @RequestBody PlaceDto placeDto) {
         Place place = placeService.getPlaceById(id);

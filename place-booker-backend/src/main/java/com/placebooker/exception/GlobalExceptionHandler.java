@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -127,6 +130,21 @@ public class GlobalExceptionHandler {
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ProblemDetail> accessDeniedException(
+            AccessDeniedException e, HttpServletRequest request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String message =
+                "User " + auth.getName() + " doesn't have required role. " + e.getMessage();
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, message);
+        problemDetail.setTitle("Authorization failed");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setType(URI.create("http://localhost:8080/errors/authorization"));
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+        return new ResponseEntity<>(problemDetail, HttpStatus.FORBIDDEN);
     }
 
     private static Set<Violation> getViolations(MethodArgumentNotValidException ex) {

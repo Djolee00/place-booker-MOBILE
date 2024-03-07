@@ -1,4 +1,4 @@
-package com.placebooker.auth.config;
+package com.placebooker.auth.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
