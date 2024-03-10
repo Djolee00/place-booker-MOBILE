@@ -2,6 +2,7 @@ package com.placebooker.exception;
 
 import com.placebooker.exception.custom.FileServiceException;
 import com.placebooker.exception.custom.NotFoundException;
+import com.placebooker.exception.custom.TokenRefreshException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -130,6 +131,19 @@ public class GlobalExceptionHandler {
         problemDetail.setInstance(URI.create(request.getRequestURI()));
 
         return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<ProblemDetail> onTokenRefreshException(
+            TokenRefreshException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        problemDetail.setType(URI.create(applicationUrl + ERROR_PATH + "token-refresh"));
+        problemDetail.setTitle("Token refresh failed");
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setInstance(URI.create(request.getRequestURI()));
+
+        return new ResponseEntity<>(problemDetail, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(AccessDeniedException.class)

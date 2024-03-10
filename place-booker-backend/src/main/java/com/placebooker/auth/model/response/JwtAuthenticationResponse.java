@@ -5,4 +5,4 @@ import lombok.Builder;
 
 @Builder
 public record JwtAuthenticationResponse(
-        Long id, String email, String token, OffsetDateTime expirationTime) {}
+        Long id, String email, String token, OffsetDateTime expirationTime, String refreshToken) {}

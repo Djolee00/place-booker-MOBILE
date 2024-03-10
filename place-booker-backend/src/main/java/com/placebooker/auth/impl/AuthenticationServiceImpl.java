@@ -5,9 +5,11 @@ import com.placebooker.auth.JwtService;
 import com.placebooker.auth.model.request.SignInRequest;
 import com.placebooker.auth.model.request.SignUpRequest;
 import com.placebooker.auth.model.response.JwtAuthenticationResponse;
+import com.placebooker.domain.RefreshToken;
 import com.placebooker.domain.Role;
 import com.placebooker.domain.User;
 import com.placebooker.repository.UserRepository;
+import com.placebooker.service.RefreshTokenService;
 import com.placebooker.service.RoleService;
 import java.time.ZoneOffset;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RoleService roleService;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     @Transactional
@@ -42,6 +45,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .build();
         userRepository.save(user);
         var jwt = jwtService.generateToken(user);
+        var refreshToken = refreshTokenService.getOrCreateRefreshToken(user);
         return JwtAuthenticationResponse.builder()
                 .id(user.getId())
                 .token(jwt)
@@ -51,11 +55,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                 .toInstant()
                                 .atOffset(ZoneOffset.ofHours(2)))
                 .email(user.getEmail())
+                .refreshToken(refreshToken.getToken())
                 .build();
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public JwtAuthenticationResponse signIn(SignInRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password()));
@@ -65,6 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .orElseThrow(
                                 () -> new IllegalArgumentException("Invalid email or password"));
         var jwt = jwtService.generateToken(user);
+        var refreshToken = refreshTokenService.getOrCreateRefreshToken(user);
         return JwtAuthenticationResponse.builder()
                 .id(user.getId())
                 .token(jwt)
@@ -74,6 +80,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                                 .toInstant()
                                 .atOffset(ZoneOffset.ofHours(2)))
                 .email(user.getEmail())
+                .refreshToken(refreshToken.getToken())
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public String refreshToken(String refreshToken) {
+        RefreshToken generatedRefreshToken = refreshTokenService.findByToken(refreshToken);
+        refreshTokenService.verifyExpiration(generatedRefreshToken);
+        return jwtService.generateToken(generatedRefreshToken.getUser());
     }
 }
