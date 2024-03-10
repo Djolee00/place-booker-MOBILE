@@ -1,8 +1,10 @@
 package com.placebooker.auth.config;
 
 import com.placebooker.auth.handlers.RestAuthenticationEntryPoint;
+import com.placebooker.auth.xss.XSSFilter;
 import com.placebooker.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -41,13 +43,18 @@ public class SecurityConfiguration {
                                         getRestAuthenticationEntryPoint()))
                 .authorizeHttpRequests(
                         request ->
-                                request.requestMatchers("/api/auth/**")
+                                request.requestMatchers("/api/auth/**", "/test/**")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
                 .sessionManagement(
                         manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
+                .headers(
+                        header ->
+                                header.xssProtection(Customizer.withDefaults())
+                                        .contentSecurityPolicy(
+                                                cs -> cs.policyDirectives("script-src 'self'")))
                 .addFilterBefore(
                         jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -76,5 +83,13 @@ public class SecurityConfiguration {
     @Primary
     public AuthenticationEntryPoint getRestAuthenticationEntryPoint() {
         return new RestAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public FilterRegistrationBean<XSSFilter> filterRegistrationBean() {
+        FilterRegistrationBean<XSSFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new XSSFilter());
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
     }
 }
