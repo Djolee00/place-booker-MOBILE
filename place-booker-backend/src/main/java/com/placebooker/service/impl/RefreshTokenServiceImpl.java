@@ -28,7 +28,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Transactional(readOnly = true)
     public RefreshToken findByToken(String token) {
         return refreshTokenRepository
-                .findByToken(token)
+                .findByTokenAndInvalidatedIsFalse(token)
                 .orElseThrow(
                         () -> new NotFoundException("Refresh token " + token + " doesn't exist"));
     }
@@ -66,5 +66,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Transactional(readOnly = true)
     public RefreshToken findLatestRefreshTokenByUser(User user) {
         return refreshTokenRepository.findUserLatestRefreshToken(user);
+    }
+
+    @Override
+    @Transactional
+    public void invalidateTokenByUser(User user) {
+        refreshTokenRepository.invalidateTokensByUser(user);
     }
 }

@@ -6,6 +6,7 @@ import com.placebooker.auth.model.request.SignUpRequest;
 import com.placebooker.auth.model.request.TokenRefreshRequest;
 import com.placebooker.auth.model.response.JwtAuthenticationResponse;
 import com.placebooker.auth.model.response.TokenRefreshResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +34,17 @@ public class AuthenticationController {
             @Valid @RequestBody TokenRefreshRequest request) {
         String token = authenticationService.refreshToken(request.refreshToken());
         return ResponseEntity.ok(new TokenRefreshResponse(token, request.refreshToken()));
+    }
+
+    @PostMapping("/signout")
+    public void logout(@RequestHeader("Authorization") String token, HttpServletResponse response) {
+        String[] parts = token.split(" ");
+        if (parts.length == 2) {
+            String jwtToken = parts[1];
+            authenticationService.singOut(jwtToken);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 }

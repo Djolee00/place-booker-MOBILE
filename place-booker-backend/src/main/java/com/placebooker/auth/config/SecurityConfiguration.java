@@ -50,6 +50,12 @@ public class SecurityConfiguration {
                 .sessionManagement(
                         manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
+                //                .headers(
+                //                        header ->
+                //                                header.xssProtection(Customizer.withDefaults())
+                //                                        .contentSecurityPolicy(
+                //                                                cs ->
+                // cs.policyDirectives("script-src 'self' 'unsafe-inline'")))
                 .headers(
                         header ->
                                 header.xssProtection(Customizer.withDefaults())

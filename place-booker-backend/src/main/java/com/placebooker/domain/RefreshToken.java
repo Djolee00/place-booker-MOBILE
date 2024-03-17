@@ -33,4 +33,7 @@ public class RefreshToken {
     @NotNull
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
+
+    @Column(name = "invalidated")
+    private boolean invalidated;
 }

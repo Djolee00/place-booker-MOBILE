@@ -2,6 +2,7 @@ package com.placebooker.auth.config;
 
 import com.placebooker.auth.JwtService;
 import com.placebooker.exception.custom.CustomAuthenticationException;
+import com.placebooker.service.TokenBlacklistService;
 import com.placebooker.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,14 +28,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserService userService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public JwtAuthenticationFilter(
             JwtService jwtService,
             UserService userService,
-            @Lazy AuthenticationEntryPoint authenticationEntryPoint) {
+            @Lazy AuthenticationEntryPoint authenticationEntryPoint,
+            TokenBlacklistService tokenBlacklistService) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.authenticationEntryPoint = authenticationEntryPoint;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -61,14 +65,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         userService.userDetailsService().loadUserByUsername(userEmail);
 
                 if (jwtService.validateToken(jwt, userDetails)) {
-                    SecurityContext context = SecurityContextHolder.createEmptyContext();
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(
-                                    userDetails, null, userDetails.getAuthorities());
-                    authToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request));
-                    context.setAuthentication(authToken);
-                    SecurityContextHolder.setContext(context);
+                    if (!tokenBlacklistService.isTokenBlacklisted(jwt)) {
+
+                        SecurityContext context = SecurityContextHolder.createEmptyContext();
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails, null, userDetails.getAuthorities());
+                        authToken.setDetails(
+                                new WebAuthenticationDetailsSource().buildDetails(request));
+                        context.setAuthentication(authToken);
+                        SecurityContextHolder.setContext(context);
+                    }
                 }
             }
             filterChain.doFilter(request, response);

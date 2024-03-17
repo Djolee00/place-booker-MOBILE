@@ -17,4 +17,6 @@ public interface RefreshTokenService {
     void verifyExpiration(@Valid RefreshToken refreshToken);
 
     RefreshToken findLatestRefreshTokenByUser(@NotNull User user);
+
+    void invalidateTokenByUser(User user);
 }
